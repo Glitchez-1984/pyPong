@@ -12,11 +12,13 @@ class Ball:
         self.radius = radius
         self.x_vel = self.MAX_VEL
         self.y_vel = 0
+        self.x_norm = self.MAX_VEL
 
     def restart(self):
         self.x = WIDTH // 2
         self.y = HEIGHT // 2
-
+        self.y_vel = 0
+        self.x_vel = self.x_norm
     def draw(self, win):
         pygame.draw.circle(win, self.color, (self.x, self.y), self.radius)
 
