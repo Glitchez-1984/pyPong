@@ -7,5 +7,8 @@ Includes:
 - 3 difficulty settings
 - Theme changer
 
+Future additions:
+- dynamic scaling
+- online multiplayer mode
 
 Made with Python and Pygame
