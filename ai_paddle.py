@@ -15,11 +15,22 @@ class Paddle_ai:
         paddle_rect = pygame.Rect(self.x, self.y, self.width, self.height)
         pygame.draw.rect(win, self.color, paddle_rect)
 
-    def move(self, ball_y, ball_x):
-        y_dif = abs(ball_y - (self.y + self.height//2))
-        if ball_x - 7 <= self.x + self.width or self.width == 15:
-            target = self.y + random.randint(0, self.height)
-        if ball_y > target and self.y <= HEIGHT - self.height - 10 and y_dif >= self.speed:
+    def move(self, ball_y):
+
+        middle = self.y - (self.height//2)
+        y_dif = abs(ball_y - (self.y + self.height // 2))
+        if ball_y > self.y <= HEIGHT - self.height - 10 and not(self.y + self.speed > ball_y):
             self.y += self.speed
-        elif ball_y < target and self.y >= 10 and y_dif >= self.speed:
+        elif ball_y < self.y >= 10 and not(self.y - self.speed < ball_y):
             self.y -= self.speed
+        '''
+        if self.y < ball_y:
+            self.y += self.speed
+        if self.y + self.height > ball_y:
+            self.y -= self.speed
+
+        if self.y <= 0:
+           self.y = 0
+        if self.y + self.height >= HEIGHT:
+            self.y = HEIGHT - self.height
+        '''
