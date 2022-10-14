@@ -8,7 +8,6 @@ Includes:
 - 3 difficulty settings
 - Theme changer
 
-
 Made with Python and Pygame
 
 **Feel free to use in any way but please credit me!**
