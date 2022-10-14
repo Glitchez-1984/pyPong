@@ -1,7 +1,7 @@
 # pyPong
 
 ### A very simple copy of the popular game pong
-[![Try on replit.com](https://repl-badge.jajoosam.repl.co/try.png)](https://repl.it/@glench/Python-Play-sample-game)
+[![Try on replit.com](https://repl-badge.jajoosam.repl.co/try.png)](https://replit.com/@Glitchez/PyPong?v=1)
 
 Includes:
 - 2 player and 1 Player modes
