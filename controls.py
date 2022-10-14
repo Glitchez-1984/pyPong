@@ -1,3 +1,6 @@
-WIDTH, HEIGHT = 1000, 800
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
+import gui
+WIDTH, HEIGHT = 800, 1000
+BG, FG, MULTIPLAYER = gui.get_colors()
+BALL_SPEED = 4
+PADDLE_VEL= 4
+AI_VEL = 4
