@@ -1,5 +1,7 @@
 from tkinter import *
 from tkinter import colorchooser
+
+
 def get_colors():
     root = Tk()
     root.title("Main Menu")
@@ -30,27 +32,35 @@ def get_colors():
         root.destroy()
 
     def color_ask():
-        global color
-        color = colorchooser.askcolor()
-        my_rectangle = round_rectangle(0, 0, 100, 50, fill=color[1], outline="white")
+        global bg_color
+        bg_color = colorchooser.askcolor()
+        my_rectangle = round_rectangle(0, 0, 100, 50, fill=bg_color[1], outline="white")
         canvas.place(x=40, y=100)
 
     def color_ask1():
-        global color1
-        color1 = colorchooser.askcolor()
-        my_rectangle = round_rectangle1(0, 0, 100, 50, fill=color1[1], outline="white")
+        global fg_color
+        fg_color = colorchooser.askcolor()
+        my_rectangle = round_rectangle1(0, 0, 100, 50, fill=fg_color[1], outline="white")
         canvas1.place(x=250, y=100)
+
+    # Define GUI objects
     radio = IntVar()
-    bg_button = Button(root, text="Foreground", command=color_ask, bg="#c9d9f2").place(x=65, y=50)
-    fg_button = Button(root, text="Background", command=color_ask1, bg="#c9d9f2").place(x=265, y=50)
-    P1 = Radiobutton(root, text="Singleplayer", value=0,variable=radio, fg = "red", background='#292152').place(x=150, y=100)
-    P2 = Radiobutton(root, text="Multiplayer", value=1, variable=radio, fg = "red", background='#292152').place(x=150, y=50)
-    #L1 = Radiobutton(root, text="Easy", value=1, variable=radio, fg="red", background='#292152').place(x=150,y=50)
-    #L2 = Radiobutton(root, text="Medium", value=1, variable=radio, fg="red", background='#292152').place(x=150,y=50)
-    #L3 = Radiobutton(root, text="Hard", value=1, variable=radio, fg="red", background='#292152').place(x=150,y=50)
-    done = Button(root, text="Finished", command=disable_button).place(x=160, y=180)
+    bg_button = Button(root, text="Foreground", command=color_ask, bg="#c9d9f2")
+    fg_button = Button(root, text="Background", command=color_ask1, bg="#c9d9f2")
+    P1 = Radiobutton(root, text="Single-player", value=0, variable=radio, fg="red", background='#292152')
+    P2 = Radiobutton(root, text="Multiplayer", value=1, variable=radio, fg="red", background='#292152')
+    done = Button(root, text="Finished", command=disable_button)
+
+    # Place GUI objects
+    bg_button.place(x=65, y=50)
+    fg_button.place(x=265, y=50)
+    P1.place(x=150, y=100)
+    P2.place(x=150, y=50)
+    done.place(x=160, y=180)
+
+    # End sequence
     root.mainloop()
     try:
-        return color1[1], color[1], int(radio.get())
-    except:
-        return (0,0,0), (255,255,255), int(radio.get())
+        return fg_color[1], bg_color[1], int(radio.get())
+    except NameError:
+        return (0, 0, 0), (255, 255, 255), int(radio.get())
