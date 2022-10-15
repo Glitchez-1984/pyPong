@@ -1,7 +1,4 @@
 import pygame
-import controls
-import gui
-import paddles
 from paddles import *
 from controls import *
 from ball import *
@@ -11,6 +8,8 @@ from ai_paddle import *
 pygame.init()
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Pong")
+icon = pygame.image.load('glitch.png')
+pygame.display.set_icon(icon)
 
 # VARIABLES
 ball_radius = 7
@@ -24,43 +23,14 @@ paddle2 = Paddle(paddle_length, WIDTH - 30, 100, paddle_speed, False, FG)
 ball = Ball(WIDTH // 2, HEIGHT // 2, ball_radius)
 font = pygame.font.SysFont(None, 24)
 if MULTIPLAYER == 0:
-    paddle1 = Paddle_ai(paddle_length, 30, 100, ai_paddle_speed, FG)
+    paddle1 = AI_Paddle(paddle_length, 30, 100, ai_paddle_speed, FG)
 else:
     paddle1 = Paddle(paddle_length, 15, 100, paddle_speed, True, FG)
 
 
-# COLLISION MANAGEMENT
-def handle_collision(ball, paddle1, paddle2):
-    if ball.y + ball.radius >= HEIGHT:
-        ball.y_vel *= -1.05
-    elif ball.y - ball.radius <= 0:
-        ball.y_vel *= -1.05
-
-    if ball.x_vel < 0:
-        if paddle1.y <= ball.y <= paddle1.y + paddle1.height:
-            if ball.x - ball.radius <= paddle1.x + paddle1.width:
-                ball.x_vel *= -1.05
-
-                middle_y = paddle1.y + paddle1.height / 2
-                difference_in_y = middle_y - ball.y
-                reduction_factor = (paddle1.height / 2) / ball.MAX_VEL
-                y_vel = difference_in_y / reduction_factor
-                ball.y_vel = -1.05 * y_vel
-    else:
-        if paddle2.y <= ball.y <= paddle2.y + paddle2.height:
-            if ball.x + ball.radius >= paddle2.x:
-                ball.x_vel *= -1.05
-
-                middle_y = paddle2.y + paddle2.height / 2
-                difference_in_y = middle_y - ball.y
-                reduction_factor = (paddle2.height / 2) / ball.MAX_VEL
-                y_vel = difference_in_y / reduction_factor
-                ball.y_vel = -1.05 * y_vel
-
-
 def set_text(string, coordx, coordy, fontSize):
-    font = pygame.font.Font('freesansbold.ttf', fontSize)
-    text = font.render(string, True, FG)
+    fontx = pygame.font.Font('freesansbold.ttf', fontSize)
+    text = fontx.render(string, True, FG)
     textRect = text.get_rect()
     textRect.center = (coordx, coordy)
     return text, textRect
@@ -84,25 +54,37 @@ def main():
     run = True
     clock = pygame.time.Clock()
     P1_SCORE, P2_SCORE, check_win = 0, 0, (False, None)
-
+    current_time = 0
+    stop_time = 0
     while run:
         clock.tick(FPS)
+        current_time = pygame.time.get_ticks()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
         if check_win[0]:
             win_screen = set_text("Game Over. " + str(check_win[1]) + " Won", WIDTH // 2, 150, 40)
             win.blit(win_screen[0], win_screen[1])
+            pass
         else:
             paddle2.move()
-            ball.move()
             if MULTIPLAYER == 0:
                 paddle1.move(ball.y)
+                if ball.score:
+                    paddle1.hit = True
             else:
                 paddle1.move()
-            handle_collision(ball, paddle1, paddle2)
+            ball.handle_collision(paddle1, paddle2)
             P1_SCORE, P2_SCORE, check_win = ball.check_score(P1_SCORE, P2_SCORE)
             graphics(win)
+            if ball.score:
+                ball.restart()
+                stop_time = pygame.time.get_ticks()
+                ball.countdown = True
+                ball.score = False
+            if ball.countdown and current_time > stop_time + 1000:
+                ball.countdown = False
+            ball.move()
             p1_display = set_text(str(P1_SCORE), WIDTH // 2 - 60, 70, 60)
             p2_display = set_text(str(P2_SCORE), WIDTH // 2 + 60, 70, 60)
             win.blit(p1_display[0], p1_display[1])
